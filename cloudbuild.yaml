@@ -1,0 +1,43 @@
+
+steps:
+# 1. Build the Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'build',
+    '-t',
+    '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daily-notes-repo/gcp-daily-notes-app:latest',
+    '.'
+  ]
+
+# 2. Push the Docker image to Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+    'push',
+    '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daily-notes-repo/gcp-daily-notes-app:latest'
+  ]
+
+# 3. Deploy the image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: [
+    'run',
+    'deploy',
+    'gcp-daily-notes-app',
+    '--image',
+    '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daily-notes-repo/gcp-daily-notes-app:latest',
+    '--region',
+    '${_REGION}',
+    '--platform',
+    'managed',
+    '--set-env-vars',
+    'GCP_PROJECT=${PROJECT_ID}',
+    '--allow-unauthenticated' # Necessary for API Gateway to invoke it, but the gateway provides the public security
+  ]
+
+# Define default substitutions
+substitutions:
+  _REGION: 'us-central1' # You can override this with --substitutions=_REGION=your-region
+
+# Make the built image available for other steps
+images:
+- '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daily-notes-repo/gcp-daily-notes-app:latest'

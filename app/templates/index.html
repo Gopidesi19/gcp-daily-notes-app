@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Notes App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 28px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 100px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #1877f2;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        .button:hover {
+            background-color: #166fe5;
+        }
+        .notes-section {
+            margin-top: 30px;
+        }
+        h2 {
+            font-size: 22px;
+            color: #333;
+        }
+        .note {
+            background-color: #f7f7f7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border: 1px solid #e9e9e9;
+        }
+        .note p {
+            margin: 0;
+            font-size: 16px;
+        }
+        .note .timestamp {
+            font-size: 12px;
+            color: #606770;
+            margin-top: 8px;
+        }
+        .empty-state {
+            text-align: center;
+            color: #606770;
+            padding: 40px;
+            background-color: #f7f7f7;
+            border-radius: 6px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #8a8a8a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Notes</h1>
+        <form action="/add" method="post">
+            <textarea name="note" placeholder="What's on your mind?" required></textarea>
+            <button type="submit" class="button">Save Note</button>
+        </form>
+
+        <div class="notes-section">
+            <h2>Saved Notes</h2>
+            {% if notes %}
+                {% for note in notes %}
+                <div class="note">
+                    <p>{{ note.note }}</p>
+                    <div class="timestamp">
+                        {{ note.timestamp.strftime('%Y-%m-%d %H:%M:%S') if note.timestamp else 'No timestamp' }} UTC
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No notes found. Write one above to get started!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <footer>
+        <p>Version: {{ app_version }}</p>
+    </footer>
+</body>
+</html>

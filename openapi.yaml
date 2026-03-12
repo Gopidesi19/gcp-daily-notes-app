@@ -1,0 +1,21 @@
+
+swagger: '2.0'
+info:
+  title: 'Daily Notes API'
+  description: 'API for the Daily Notes application, routing to a Cloud Run backend.'
+  version: '1.0.0'
+schemes:
+  - 'https'
+produces:
+  - 'application/json'
+paths:
+  # This matches all paths and passes them to the backend
+  '/**':
+    x-google-backend:
+      # IMPORTANT: Replace the placeholder below with your actual Cloud Run URL
+      address: '[YOUR_SERVICE_URL_HERE]'
+      # The path_translation tells API Gateway how to map the incoming request path
+      # to the backend request path.
+      # CONSTANT_ADDRESS: The request path is appended to the backend address.
+      # e.g., a request to /add becomes [address]/add
+      path_translation: CONSTANT_ADDRESS
