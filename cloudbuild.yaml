@@ -41,3 +41,7 @@ substitutions:
 # Make the built image available for other steps
 images:
 - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daily-notes-repo/gcp-daily-notes-app:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
